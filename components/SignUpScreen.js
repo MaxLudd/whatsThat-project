@@ -12,19 +12,19 @@ class SignUpScreen extends Component {
     this.state = {
       email: '',
       password: '',
-      firstName: '',
-      lastName: ''
+      first_name: '',
+      last_name: ''
     }
   }
 
-  handleFirstNameInput = (firstName) => {
+  handleFirstNameInput = (first_name) => {
     //validation
-    this.setState({firstName: firstName})
+    this.setState({first_name: first_name})
   }
 
-  handleLastNameInput = (lastName) => {
+  handleLastNameInput = (last_name) => {
     //validation
-    this.setState({lastName: lastName})
+    this.setState({last_name: last_name})
   }
 
   handleEmailInput = (email) => {
@@ -43,7 +43,7 @@ class SignUpScreen extends Component {
     return fetch("http://localhost:3333/api/1.0.0/user", {
         method: 'post',
         headers: {
-            'Content Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(this.state)
     })
@@ -72,8 +72,8 @@ class SignUpScreen extends Component {
 
     return (
       <View>
-        <TextInput style={styles.input} placeholder="First Name" onChangeText={this.handleEmailInput} value={this.state.firstName} />
-        <TextInput style={styles.input} placeholder="Last Name" onChangeText={this.handleEmailInput} value={this.state.lastName} />
+        <TextInput style={styles.input} placeholder="First Name" onChangeText={this.handleFirstNameInput} value={this.state.first_name} />
+        <TextInput style={styles.input} placeholder="Last Name" onChangeText={this.handleLastNameInput} value={this.state.last_name} />
         <TextInput style={styles.input} placeholder="email" onChangeText={this.handleEmailInput} value={this.state.email} />
         <TextInput style={styles.input} placeholder="password" secureTextEntry={true} onChangeText={this.handlePasswordInput} value={this.state.password} />
         <Button title="Register" onPress={() => this.signup()}/>

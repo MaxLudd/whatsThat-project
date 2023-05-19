@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, TextInput, View, Button, Alert, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class LoginScreen extends Component {
   constructor(props){
@@ -30,7 +30,7 @@ class LoginScreen extends Component {
     return fetch("http://localhost:3333/api/1.0.0/login", {
         method: 'post',
         headers: {
-            'Content Type': 'application/json'
+            'Content-Type': 'application/json'
         },
         body: JSON.stringify(this.state)
     })
@@ -45,8 +45,9 @@ class LoginScreen extends Component {
     })
     .then(async (responseJson) => {
         console.log(responseJson);
-        await AsyncStorage.setItem('@session_token', responseJson.token);
-        this.props.navigation.navigate("MainAppNav");
+        await AsyncStorage.setItem('@session_token', JSON.stringify(responseJson.token));
+        await AsyncStorage.setItem('@user_id', JSON.stringify(responseJson.id));
+        this.props.navigation.navigate("Home");
     })
     .catch((error) => {
         console.log(error);

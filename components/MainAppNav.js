@@ -14,27 +14,14 @@ class MainAppNav extends Component {
     }
   }
 
-  handleEmailInput = (email) => {
-    //validation
-    this.setState({email: email})
-  }
-
-  handlePasswordInput = (pass) => {
-    //validation
-    this.setState({password: pass})
-  }
-
-
   render() {
 
     const navigation = this.props.navigation;
 
     return (
       <View>
-        <TextInput style={styles.input} placeholder="email" onChangeText={this.handleEmailInput} value={this.state.email} />
-        <TextInput style={styles.input} placeholder="password" secureTextEntry={true} onChangeText={this.handlePasswordInput} value={this.state.password} />
-        <Button title="Login" />
-        <Button title="Don't have an account" onPress={() => navigation.navigate('SignUp')}/>
+        <Text>Welcome to WhatsThat</Text>
+        
       </View>
     
     );
