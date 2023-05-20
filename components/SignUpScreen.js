@@ -20,6 +20,7 @@ class SignUpScreen extends Component {
   }
 
 
+  //Input handlers
   handleFirstNameInput = (first_name) => {
     //validation
     this.setState({first_name: first_name})
@@ -40,6 +41,7 @@ class SignUpScreen extends Component {
     this.setState({password: pass})
   }
 
+  //Signup function sends post request with user data and creates a new user
   signup = () => {
     //validation here
     let toSend = {};

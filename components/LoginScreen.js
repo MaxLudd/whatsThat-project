@@ -15,6 +15,7 @@ class LoginScreen extends Component {
     }
   }
 
+  //Input handlers
   handleEmailInput = (email) => {
     //validation
     this.setState({email: email})
@@ -25,6 +26,7 @@ class LoginScreen extends Component {
     this.setState({password: pass})
   }
 
+  //Login function sends post request with user inputs, stores session token and user id in async memory
   login = async () => {
     //validation
     let toSend = {};

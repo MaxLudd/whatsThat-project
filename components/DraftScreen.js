@@ -13,10 +13,12 @@ class DraftScreen extends Component{
 
     }
 
+    //Input handler
     handleDraftInput = (draft) => {
         this.setState({draft: draft})
     }
 
+    //Save draft function strores draft in async memory
     saveDraft = async () => {
         await AsyncStorage.setItem('@draft', this.state.draft);
         this.setState({message: 'Draft Saved'});

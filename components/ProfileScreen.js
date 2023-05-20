@@ -21,6 +21,7 @@ class ProfileScreen extends Component{
 
     }
 
+    //Get user function retrieves the user's data to be compared to any changed data
     getUser = async () => {
         let userID;
         try{
@@ -64,6 +65,7 @@ class ProfileScreen extends Component{
         });
     }
 
+    //Update user function checks if changes have been made to the data, if so makes a patch request with the new data
     updateUser = async () => {
         let toSend = {};
         let userID;
@@ -89,7 +91,6 @@ class ProfileScreen extends Component{
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                //'Accept': 'application/json',
                 'X-Authorization': await AsyncStorage.getItem("@session_token")
             },
             body: JSON.stringify(toSend)
@@ -118,6 +119,7 @@ class ProfileScreen extends Component{
         });
     }
 
+    //Logout function removes session token and user id from async storage
     logoutUser = async() => {
         return fetch("http://localhost:3333/api/1.0.0/logout" , {
             method: 'POST',
@@ -141,6 +143,8 @@ class ProfileScreen extends Component{
         });
     }
 
+
+    //Input handlers
     handleFirstNameInput = (first_name) => {
         //validation
         this.setState({first_name: first_name})
