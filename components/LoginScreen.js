@@ -10,7 +10,8 @@ class LoginScreen extends Component {
 
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      errorMessage: ''
     }
   }
 
@@ -26,27 +27,32 @@ class LoginScreen extends Component {
 
   login = async () => {
     //validation
-
+    let toSend = {};
+    toSend['email'] = this.state.email;
+    toSend['password'] = this.state.password;
     return fetch("http://localhost:3333/api/1.0.0/login", {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify(toSend)
     })
     .then((response) => {
         if(response.status === 200){
             return response.json()
         }else if(response.status === 400){
+            this.setState({errorMessage: 'Your email and password are incorrect'});
             throw 'Invalid email or password';
         }else{
+            this.setState({errorMessage: 'Something went wrong'});
             throw 'Something went wrong';
         }
     })
     .then(async (responseJson) => {
         console.log(responseJson);
-        await AsyncStorage.setItem('@session_token', JSON.stringify(responseJson.token));
-        await AsyncStorage.setItem('@user_id', JSON.stringify(responseJson.id));
+        console.log(responseJson.token);
+        await AsyncStorage.setItem('@session_token', responseJson.token);
+        await AsyncStorage.setItem('@user_id', responseJson.id);
         this.props.navigation.navigate("Home");
     })
     .catch((error) => {
@@ -65,6 +71,7 @@ class LoginScreen extends Component {
         <TextInput style={styles.input} placeholder="password" secureTextEntry={true} onChangeText={this.handlePasswordInput} value={this.state.password} />
         <Button title="Login" onPress={() => this.login()} />
         <Button title="Don't have an account" onPress={() => navigation.navigate('SignUp')}/>
+        <Text style={styles.error}> {this.state.errorMessage}</Text>
       </View>
     
     );
@@ -78,6 +85,10 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  error: {
+    margin: 12,
+    color: 'red'
   },
 });
 

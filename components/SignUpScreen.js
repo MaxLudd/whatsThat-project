@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 const Stack = createNativeStackNavigator();
 
 class SignUpScreen extends Component {
+  
   constructor(props){
     super(props);
 
@@ -13,9 +14,11 @@ class SignUpScreen extends Component {
       email: '',
       password: '',
       first_name: '',
-      last_name: ''
+      last_name: '',
+      errorMessage: ''
     }
   }
+
 
   handleFirstNameInput = (first_name) => {
     //validation
@@ -39,20 +42,27 @@ class SignUpScreen extends Component {
 
   signup = () => {
     //validation here
-
+    let toSend = {};
+    toSend['email'] = this.state.email;
+    toSend['password'] = this.state.password;
+    toSend['first_name'] = this.state.first_name;
+    toSend['last_name'] = this.state.last_name;
     return fetch("http://localhost:3333/api/1.0.0/user", {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(this.state)
+        body: JSON.stringify(toSend)
     })
     .then((response) => {
         if(response.status === 201){
             return response.json()
         }else if (response.status === 400){
+            this.setState({errorMessage: "Your email is incorrect or your password is not adequate"});
+              
             throw 'Failed Validation';
         }else{
+            this.setState({errorMessage: "Something went wrong"});
             throw 'Something went wrong'
         }
     })
@@ -77,6 +87,7 @@ class SignUpScreen extends Component {
         <TextInput style={styles.input} placeholder="email" onChangeText={this.handleEmailInput} value={this.state.email} />
         <TextInput style={styles.input} placeholder="password" secureTextEntry={true} onChangeText={this.handlePasswordInput} value={this.state.password} />
         <Button title="Register" onPress={() => this.signup()}/>
+        <Text style={styles.error}> {this.state.errorMessage}</Text>
       </View>
     
     );
@@ -90,6 +101,10 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  error: {
+    margin: 12,
+    color: 'red'
   },
 });
 
