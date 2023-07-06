@@ -71,7 +71,7 @@ class LoginScreen extends Component {
       <View>
         <TextInput style={styles.input} placeholder="email" onChangeText={this.handleEmailInput} value={this.state.email} />
         <TextInput style={styles.input} placeholder="password" secureTextEntry={true} onChangeText={this.handlePasswordInput} value={this.state.password} />
-        <Button title="Login" onPress={() => this.login()} />
+        <Button title="Login Hello" onPress={() => this.login()} />
         <Button title="Don't have an account" onPress={() => navigation.navigate('SignUp')}/>
         <Text style={styles.error}> {this.state.errorMessage}</Text>
       </View>
