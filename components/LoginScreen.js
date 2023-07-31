@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, Alert, StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text, TextInput, View, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class LoginScreen extends Component {
@@ -68,11 +66,15 @@ class LoginScreen extends Component {
     const navigation = this.props.navigation;
 
     return (
-      <View>
+      <View style={styles.container}>
         <TextInput style={styles.input} placeholder="email" onChangeText={this.handleEmailInput} value={this.state.email} />
         <TextInput style={styles.input} placeholder="password" secureTextEntry={true} onChangeText={this.handlePasswordInput} value={this.state.password} />
-        <Button title="Login Hello" onPress={() => this.login()} />
-        <Button title="Don't have an account" onPress={() => navigation.navigate('SignUp')}/>
+        <TouchableOpacity style={styles.loginButton} onPress={() => this.login()}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.signupButton} onPress={() => navigation.navigate('SignUp')}>
+          <Text style={styles.buttonText}>Don't have an account</Text>
+        </TouchableOpacity>
         <Text style={styles.error}> {this.state.errorMessage}</Text>
       </View>
     
@@ -82,16 +84,50 @@ class LoginScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+
+  },
   input: {
     height: 40,
     margin: 12,
     borderWidth: 1,
+    //borderColor: 'gray',
+    borderRadius: 8,
     padding: 10,
+    marginBottom: 16,
   },
   error: {
     margin: 12,
     color: 'red'
   },
+  loginButton: {
+    margin: 12,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    color: 'black',
+    backgroundColor: '#77DD77',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8,
+    marginBottom: 0
+  },
+  signupButton: {
+    margin: 12,
+    borderWidth: 1,
+    borderColor: 'gray',
+    padding: 10,
+    backgroundColor: '#AEC6CF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 8
+  },
+  buttonText: {
+    color: 'black',
+    fontWeight: 'bold'
+  }
 });
 
 export default LoginScreen
