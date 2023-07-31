@@ -8,17 +8,42 @@ import LoginScreen from './components/LoginScreen';
 import SignUp from './components/SignUpScreen';
 import MainAppNav from './components/MainAppNav';
 import DraftScreen from './components/DraftScreen';
-import ProfileScreen from './components/ProfileScreen'
+import ProfileScreen from './components/ProfileScreen';
+import AddContact from './components/AddContact';
+import ViewBlocked from './components/ViewBlocked';
+import TakePhoto from './components/TakePhoto';
+import Chats from './components/Chats';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+function Profile() {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name = "Profile" component={ProfileScreen}/>
+      <Stack.Screen name = "TakePhoto" component={TakePhoto}/>
+      <Stack.Screen name = "ViewBlocked" component={ViewBlocked}/>
+    </Stack.Navigator>
+  )
+}
+
+ function Contacts() {
+   return(
+     <Stack.Navigator>
+       <Stack.Screen name = "Contacts" component={MainAppNav}/>
+       <Stack.Screen name = "AddContact" component={AddContact}/>
+     </Stack.Navigator>
+   )
+ }
+
+
 function Home() {
   return(
     <Tab.Navigator>
-        <Tab.Screen name = "Home" component={MainAppNav} options={{ headerShown: false }}/>
+        <Tab.Screen name = "Contacts" component={Contacts} options={{ headerShown: false }}/>
+        <Tab.Screen name = "Chats" component={Chats} options={{ headerShown: false }}/>
         <Tab.Screen name ="Drafts" component={DraftScreen} options={{ headerShown: false }} />
-        <Tab.Screen name = "Profile" component={ProfileScreen} options={{ headerShown: false}} />
+        <Tab.Screen name = "Profile" component={Profile} options={{ headerShown: false}} />
     </Tab.Navigator>
   );
 }
@@ -30,7 +55,7 @@ class App extends Component {
         <Stack.Navigator>
           <Stack.Screen name="Login" component={LoginScreen}/>
           <Stack.Screen name="SignUp" component={SignUp}/>
-          <Stack.Screen name="Home" component={Home}/>
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     
