@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View, Button, Alert, StyleSheet } from 'react-native';
+import { Text, TextInput, View, Button, Alert, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class ProfileScreen extends Component{
@@ -14,11 +14,48 @@ class ProfileScreen extends Component{
             password: '',
             first_name: '',
             last_name: '',
-            errorMessage: ''
+            errorMessage: '',
+            photo: null,
+            isLoading: true
         }
 
         this.getUser();
 
+    }
+
+    componentDidMount(){
+        this.getProfileImage()
+    }
+
+
+    getProfileImage = async () => {
+        fetch("http://localhost:3333/api/1.0.0/user" + await AsyncStorage.getItem('@user_id') + "/photo", {
+            method: "get",
+            headers: {
+                "X-Authorization": await AsyncStorage.getItem("@session_token")
+            }
+        })
+        .then((res) => {
+            if(res.status === 200){
+                return res.blob()
+            }else {
+                this.setState({errorMessage: 'Error while loading picture'})
+                throw 'Picture error'
+            }
+            
+        })
+        .then((resBlob) => {
+            let data = URL.createObjectURL(resBlob);
+
+            this.setState({
+                photo: data,
+                isLoading: false
+            })
+        })
+        .catch((err) => {
+            console.log("Error is caught")
+            console.log(err)
+        })
     }
 
     //Get user function retrieves the user's data to be compared to any changed data
@@ -169,11 +206,28 @@ class ProfileScreen extends Component{
 
     render() {
         return(
-            <View>
+            <View style={styles.container}>
+                {this.state.photo ? (
+                    <View style={{flex:1}}>
+                        <Image
+                            source={{
+                                uri: this.state.photo
+                            }}
+                            style={{
+                                width: 100,
+                                height: 100
+                            }}
+                        />
+                    </View>
+                ) : (
+                    <Text>Loading</Text>
+                )}
+                <Button title="Take Picture" onPress={() => this.props.navigation.navigate("TakePhoto")}/>
                 <TextInput style={styles.input} placeholder="First Name" onChangeText={this.handleFirstNameInput} value={this.state.first_name} />
                 <TextInput style={styles.input} placeholder="Last Name" onChangeText={this.handleLastNameInput} value={this.state.last_name} />
                 <TextInput style={styles.input} placeholder="email" onChangeText={this.handleEmailInput} value={this.state.email} />
                 <Button title="Change" onPress={() => this.updateUser()} />
+                <Button title="View Blocked Users" onPress={() => this.props.navigation.navigate("ViewBlocked")}/>
                 <Button title="LOG OUT" onPress={() => this.logoutUser()} />
                 <Text style={styles.error}> {this.state.errorMessage} </Text>
             </View>
@@ -182,6 +236,11 @@ class ProfileScreen extends Component{
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#c9eff0',
+        //justifyContent: 'space-between',
+    },
     input: {
       height: 40,
       margin: 12,
